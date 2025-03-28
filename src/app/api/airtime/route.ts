@@ -96,6 +96,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (data.error) {
+      return NextResponse.json({ error: data.error }, { status: 400 });
+    }
     // Store the transaction in the database
     await prisma.transaction.create({
       data: {
@@ -111,11 +114,6 @@ export async function POST(request: NextRequest) {
         method: data.airtimeHistory.Method,
       },
     });
-
-    if (data.error) {
-      return NextResponse.json({ error: data.error }, { status: 400 });
-    }
-
     return NextResponse.json(data);
   } catch (error) {
     console.error("Error purchasing airtime:", error);
